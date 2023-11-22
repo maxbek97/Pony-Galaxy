@@ -1,0 +1,79 @@
+@font-face {
+    font-family: Pixelar; /* Гарнитура шрифта */
+    src: url(PixelarRegular.woff2); /* Путь к файлу со шрифтом */
+   }
+.text {
+    font-family: Pixelar;
+    text-align: center;
+    text-shadow: 2px -2px 0 aqua, -2px 2px 0 red;
+} 
+h1 {
+    color: white;
+    font-weight: 400;
+    font-size: 90px;
+    margin: 20px auto 20px auto;
+}
+h2 {
+    font-weight: 400;
+    font-size: 30px;
+}
+
+body {
+    background: rgb(18, 45, 116);
+    overflow: hidden;
+}
+
+.main {
+    width: 20%;
+    margin: 0 auto 0 auto;
+}
+
+canvas {
+    margin:auto;
+    outline: 5px solid white;
+    background-image: url(images/galaxy\ background\ R2.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.difficulty {
+    outline: 5px solid white;
+    background-color: rgb(44, 44, 42);
+}
+
+.Hof {
+    outline: 5px solid white;
+    background-image: url(images/hall\ of\ fame\ R2\ sprite.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.difficulty li {
+    border: 5px solid white;
+    margin: 15px 10px 15px 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.img {
+    border: 5px white;
+    margin: 10px;
+    height: 100px;
+    width: 100px;
+}
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+
+}
+
+.casual {
+    color: white;
+    font-weight: 400;
+    font-size: 40px;
+    margin: 5px;
+}

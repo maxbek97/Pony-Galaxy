@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang = "ru">
+<head>
+    <link href="styles.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <script src="script.js"></script>
+</head>
+<body>
+    <audio src="/sounds/PonyGalaxy.wav" type = "audio/wav" autoplay loop></audio>
+    <h1 class="text">Pony galaxy</h1>
+    <div style="display: flex;">
+        <div class="main difficulty">
+            <h2 class="text" style="color: white">Choose the difficulty</h2>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>
+                    <a href="index.html/">
+                    <div class="wrapper">
+                        <div><img class = "img" src="images/pony R sprite easy difficult.png"></div>
+                        <div class="text casual">Easy</div>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                    <div class="wrapper">
+                        <div><img class = "img" src="images/pony R sprite Middle difficult.png"></div>
+                        <div class="text casual">Normal</div>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                    <div class="wrapper">
+                        <div><img class = "img" src="images/pony R sprite hard difficult.png"></div>
+                        <div class="text casual">Hard</div>
+                    </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <canvas width = "800" height="600" id="screen"></canvas>
+        <div class="main Hof" style="color: azure;">
+            <h2 class="text" style="color:black">Hall of Fame</h2>
+        </div>
+    </div>
+</body>
+</html>
