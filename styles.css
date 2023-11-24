@@ -2,24 +2,27 @@
     font-family: Pixelar; /* Гарнитура шрифта */
     src: url(PixelarRegular.woff2); /* Путь к файлу со шрифтом */
    }
+
 .text {
     font-family: Pixelar;
     text-align: center;
     text-shadow: 2px -2px 0 aqua, -2px 2px 0 red;
-} 
+}
+
 h1 {
     color: white;
     font-weight: 400;
     font-size: 90px;
     margin: 20px auto 20px auto;
 }
+
 h2 {
     font-weight: 400;
     font-size: 30px;
 }
 
 body {
-    background: rgb(18, 45, 116);
+    background: rgb(0, 19, 66);
     overflow: hidden;
 }
 
@@ -38,7 +41,8 @@ canvas {
 
 .difficulty {
     outline: 5px solid white;
-    background-color: rgb(44, 44, 42);
+    background-image: url(images/difficult\ background\ R.png);
+    background-size: cover;
 }
 
 .Hof {
@@ -63,6 +67,7 @@ a {
     height: 100px;
     width: 100px;
 }
+
 .wrapper {
     display: flex;
     flex-wrap: wrap;

@@ -51,7 +51,7 @@
 
     var Invader = function(game, position) {
         this.game = game;
-        this.size = {width: 16, height:16};
+        this.size = {width: 70, height:55};
         this.position = position;
         this.patrolX = 0;
         this.speedX = 2;
@@ -82,13 +82,13 @@
         this.game = game;
         this.bullets = 0;
         this.timer = 0;
-        this.size = {width:80, height:80}; //100*80 по нормальному
+        this.size = {width:100, height:80}; //100*80 по нормальному
         this.position = {x: gamesize.x/10, y: gamesize.y/2 - this.size.height/2};
         this.Keyboarder = new Keyboarder();
     }
 
     var Bullet = function(position, velocity){
-        this.size = {width:5, height:5};
+        this.size = {width:6, height:6};
         this.position = position;
         this.velocity = velocity;
     }
@@ -115,14 +115,14 @@
                 this.position.y += 5
             }
             if(this.Keyboarder.isDown(this.Keyboarder.KEYS.SPACE)) {
-                if (this.bullets < 5) {
+                if (this.bullets < 1) {
                 var bullet = new Bullet({x:this.position.x + this.size.width, y:this.position.y + this.size.width/2}, {x:6, y: 0});
                 this.game.addBody(bullet);
                 this.bullets++;
                 }
             }
             this.timer++;
-            if(this.timer % 15 == 0){
+            if(this.timer % 30 == 0){
                 this.bullets = 0;
             }
         }
@@ -146,15 +146,22 @@
     var imgPony = new Image();
     imgPony.src = "images/pony R sprite.png"
     var imgEnemy = new Image();
-    imgEnemy.src = "images/enemy R sprite.png"
+    imgEnemy.src = "images/enemy R1 sprite.png"
 
     var drawPony = function(screen, body){
+        screen.shadowOffsetX = 0;
         screen.drawImage(imgPony, body.position.x, body.position.y, 100, 80);
+        
     }
     var drawEnemy = function(screen, body){
+        screen.shadowOffsetX = 0;
         screen.drawImage(imgEnemy, body.position.x, body.position.y, 70, 55);
+        
     }
     var drawPrim = function(screen, body){
+        screen.fillStyle = "white";
+        screen.shadowOffsetX = -1;
+        screen.shadowColor = "red";
         screen.fillRect(body.position.x, body.position.y, body.size.width, body.size.height);
     }
 
