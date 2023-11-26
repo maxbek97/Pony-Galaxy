@@ -31,6 +31,7 @@
                 this.bodies[i].update();
             }
             for(var i = 0; i < this.invaders.length; i++){
+                
                 this.invaders[i].update();
             }
         },
@@ -53,28 +54,25 @@
         this.game = game;
         this.size = {width: 70, height:55};
         this.position = position;
-        this.patrolX = 0;
+        this.timer = 0;
         this.speedX = 2;
     }
 
     Invader.prototype = {
         update: function() {
-            if(this.patrolX < 0 || this.patrolX > 160) {
-                this.speedX = -this.speedX
-            }
-
-            this.position.x += this.speedX;
-            this.patrolX += this.speedX;
+            this.position.x -= this.speedX;
         }
     }
 
     var createInvaders = function(game){
         var invaders = [];
-        for(var i = 0; i < 24; i++){
-            var x = 30 + (i%8) *70;
-            var y = 30 + (i%3) *70;
-            invaders.push(new Invader(game, {x:x, y:y}));
-        }
+        setInterval(
+            () => {
+            var y = Math.floor(Math.random() * 470);
+            invaders.push(new Invader(game, {x:900, y:y}));
+            },
+            1 * 1000
+          );
         return invaders;
     }
 
