@@ -7,14 +7,13 @@
 </head>
 <body>
     <audio src="/sounds/PonyGalaxy.wav" type = "audio/wav" autoplay loop></audio>
-    <h3 id="timer">30</h3>
     <h1 class="text">Pony galaxy</h1>
-    <div style="display: flex;">
+    <div style="display: flex; top: 50%; margin-top: -0.625em;">
         <div class="main difficulty">
             <h2 class="text" style="color: white">Choose the difficulty</h2>
             <ul style="list-style-type: none; padding-left: 0;">
                 <li>
-                    <a href="#?difficulty=easy">
+                    <a href="?difficulty=easy">
                     <div class="wrapper">
                         <div><img class = "img" src="images/pony R sprite easy difficult.png"></div>
                         <div class="text casual">Easy</div>
@@ -22,7 +21,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#?difficulty=normal">
+                    <a href="?difficulty=normal">
                     <div class="wrapper">
                         <div><img class = "img" src="images/pony R sprite Middle difficult.png"></div>
                         <div class="text casual">Normal</div>
@@ -30,7 +29,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#?difficulty=hard">
+                    <a href="?difficulty=hard">
                     <div class="wrapper">
                         <div><img class = "img" src="images/pony R2 sprite hard difficult.png"></div>
                         <div class="text casual">Hard</div>
@@ -39,11 +38,23 @@
                 </li>
             </ul>
         </div>
-        <canvas width = "800" height="530" id="screen"></canvas>
+        <div class="game process">
+            <canvas width = "800" height="530" id="screen"></canvas>
+            <div class="status difficulty">
+                <ul class="text casual">
+                <li>Time remaining:</li>
+                <li id="timer" class="stat"></li>
+                <li>Shoots:</li>
+                <li id="shoots" class="stat">0</li>
+                <li>Killed:</li>
+                <li id="killed" class="stat">0</li>
+                </ul>
+            </div>
+        </div>
         <div class="main Hof" style="color: azure;">
             <h2 class="text" style="color:black">Hall of Fame</h2>
+            <div> </div>
         </div>
     </div>
-    <footer></footer>
 </body>
 </html>

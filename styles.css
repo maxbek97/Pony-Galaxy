@@ -1,6 +1,6 @@
 @font-face {
     font-family: Pixelar; /* Гарнитура шрифта */
-    src: url(PixelarRegular.woff2); /* Путь к файлу со шрифтом */
+    src: url(minecraft.ttf); /* Путь к файлу со шрифтом */
    }
 
 .text {
@@ -13,7 +13,7 @@ h1 {
     color: white;
     font-weight: 400;
     font-size: 90px;
-    margin: 20px auto 20px auto;
+    margin: 20px auto 50px auto;
 }
 
 h2 {
@@ -47,7 +47,7 @@ canvas {
 
 .Hof {
     outline: 5px solid white;
-    background-image: url(images/hall\ of\ fame\ R2\ sprite.png);
+    background-image: url(images/hall\ of\ fame\ R3\ sprite.png);
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -82,3 +82,19 @@ a {
     font-size: 40px;
     margin: 5px;
 }
+
+.status ul {
+    margin: 0;
+    padding: 4px; 
+    font-size: 30px;
+}
+
+#timer, #shoots, #killed {
+    margin-right: 20px;
+}
+
+.status ul li {
+    display: inline; /* Отображать как строчный элемент */
+    border: 0;
+    margin: 0;
+   }

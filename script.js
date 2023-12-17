@@ -1,4 +1,33 @@
 let flag = true;
+let killedEnemies = 0;
+let madeshoots = 0;
+const searchParams = new URLSearchParams(window.location.search);
+switch (searchParams.get('difficulty')){
+    case 'easy':
+        var koefdif = 100;
+        break;
+    case 'hard':
+        var koefdif = 300;
+        break;
+    default:
+        var koefdif = 200;
+        break;
+}
+
+function EndGame(seconds, killed, shoots, interval){
+    let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
+    data = {name: name, accuracy: killed/shoots * 100, time: seconds};
+    scoresStr = localStorage.getItem('score')
+    score = JSON.parse(scoreStr)
+    if (score === null) {
+        score = []
+   }
+   score.push(data);
+   scoreStr = JSON.stringify(score);
+   localStorage.setItem('score', scoreStr);
+   clearInterval(interval);
+//    window.location.reload();
+};
 
 function isCollidng(entityOne, entityTwo) {
     return !(entityOne === entityTwo || 
@@ -9,6 +38,40 @@ function isCollidng(entityOne, entityTwo) {
 }
 
 ;(function (){
+    window.onload = function() {
+        scoreJson = localStorage.getItem('score')
+        score = JSON.parse(scoreJson)
+        if (score !== null) {
+            for(const el of score) {}
+        }
+        const countkilled = document.getElementById('killed');
+        const countshoots = document.getElementById('shoots');
+        let seconds = 25;
+        document.getElementById('timer').textContent = seconds
+        const timer = document.getElementById('timer');
+        let name = ''
+        const interval = setInterval(() => {
+            if (seconds < 0 || flag == false) {
+                flag = false;
+                EndGame(seconds, killedEnemies, madeshoots);
+                // clearInterval(interval);
+                return;
+            }
+            timer.textContent = seconds;
+            seconds--; 
+            
+        }, 1000);
+        setInterval(() => {
+            countkilled.textContent = killedEnemies;
+            countshoots.textContent = madeshoots;
+        }, 20);
+        if (!flag) {
+            EngGame(seconds, killedEnemies, madeshoots);
+        }
+        new Game("screen");
+
+    }
+
     var Game = function(canvasId){
         var canvas = document.getElementById(canvasId);
         var screen = canvas.getContext("2d");
@@ -17,25 +80,27 @@ function isCollidng(entityOne, entityTwo) {
             y: canvas.height
         };
 
-        // this.bodies = [new Player(this, gamesize)];
-        this.killedEnemies = 0;
         this.entitiesTypes = {Enemy: 'enemy', Player: 'player', Bullet: 'bullet'}
         this.entities = [{entity: new Player(this, gamesize), type: this.entitiesTypes.Player}]
         createInvaders(this, this.entities, this.entitiesTypes)
 
         var self = this;
-        var tick = function(){
-            self.update(gamesize);
-            self.draw(screen, gamesize);
-            requestAnimationFrame(tick);
-        }
-
-        tick();
+        loadSound("sounds/glitch.wav", function(collisionsSound) {
+            self.collisionsSound = collisionsSound;
+            var tick = function(){
+                self.update(gamesize);
+                self.draw(screen, gamesize);
+                requestAnimationFrame(tick);
+            }
+            tick();
+        });
     }
 
     Game.prototype = {
         update: function(gamesize) {
-            if (!flag) return;
+            if (!flag) {
+                return;
+            }
             const eCopy = [...this.entities];
             for (let i = 0; i < eCopy.length; i++) {
                 for (let j = 0; j < eCopy.length; j++) {
@@ -46,12 +111,17 @@ function isCollidng(entityOne, entityTwo) {
 
                     if (isCollidng(eCopy[i].entity, eCopy[j].entity)) {
                         if (eCopy[i].type === this.entitiesTypes.Player) {
-                            console.log('collide')
                             flag = false;
+                            this.collisionsSound.load();
+                            this.collisionsSound.play();
+                            killedEnemies++;
                             return;
                         }
                         this.entities.splice(i,1);
-                        this.entities.splice(j,1)
+                        this.entities.splice(j,1);
+                        killedEnemies++;
+                        this.collisionsSound.load();
+                        this.collisionsSound.play();
                     }
                 }
             }
@@ -89,7 +159,6 @@ function isCollidng(entityOne, entityTwo) {
         },
         addBody: function(body) {
             this.entities.push({entity: body, type: this.entitiesTypes.Bullet});
-            console.log(this.entities)
         },
     }
 
@@ -108,27 +177,26 @@ function isCollidng(entityOne, entityTwo) {
     }
 
     var createInvaders = function(game, entities, entetiesTypes){
-        // var invaders = [];
         setInterval(
             () => {
             var y = Math.floor(Math.random() * 470);
             entities.push({entity: new Invader(game, {x:900, y:y}), type: entetiesTypes.Enemy});
             },
-            1 * 1000
+            1 * 1000 * (100 / koefdif)
           );
-        // return invaders;
     }
 
     var Player = function(game, gamesize){
         this.game = game;
         this.bullets = 0;
         this.timer = 0;
-        this.size = {width:100, height:80}; //100*80 по нормальному
+        this.size = {width:100, height:80};
         this.position = {x: gamesize.x/10, y: gamesize.y/2 - this.size.height/2};
         this.Keyboarder = new Keyboarder();
     }
 
     var Bullet = function(position, velocity){
+        madeshoots++;
         this.size = {width:6, height:6};
         this.position = position;
         this.velocity = velocity;
@@ -163,7 +231,7 @@ function isCollidng(entityOne, entityTwo) {
                 }
             }
             this.timer++;
-            if(this.timer % 30 == 0){
+            if(this.timer % (koefdif / 10) == 0){
                 this.bullets = 0;
             }
         }
@@ -189,6 +257,17 @@ function isCollidng(entityOne, entityTwo) {
     var imgEnemy = new Image();
     imgEnemy.src = "images/enemy R1 sprite.png"
 
+
+    var loadSound = function(url, callback) {
+        var loaded = function(){
+            callback(sound);
+            sound.removeEventListener("canplaythrough", loaded);
+        };
+        var sound = new Audio(url);
+        sound.addEventListener("canplaythrough", loaded);
+        sound.load();
+    }
+
     var drawPony = function(screen, body){
         screen.shadowOffsetX = 0;
         screen.drawImage(imgPony, body.position.x, body.position.y, 100, 80);
@@ -204,26 +283,10 @@ function isCollidng(entityOne, entityTwo) {
         screen.shadowColor = "red";
         screen.fillRect(body.position.x, body.position.y, body.size.width, body.size.height);
     }
-    
 
+    
     var clearRect = function(screen, gamesize){
         screen.clearRect(0, 0, gamesize.x, gamesize.y);
     }
-
-    window.onload = function() {
-        let seconds = 5;
-        const timer = document.getElementById('timer');
-        setInterval(() => {
-            if (seconds < 0) {
-                flag = false;
-                // Надпись "Times up"
-                return;
-            }
-            timer.textContent = "0:" + seconds;
-            seconds--;
-            
-            
-        }, 30 * 1000);
-        new Game("screen");
-    }
 })();
+
