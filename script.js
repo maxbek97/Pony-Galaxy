@@ -1,3 +1,13 @@
+let flag = true;
+
+function isCollidng(entityOne, entityTwo) {
+    return !(entityOne === entityTwo || 
+        entityOne.position.x + entityOne.size.width / 2 < entityTwo.position.x - entityTwo.size.width / 2 ||
+        entityOne.position.y + entityOne.size.height / 2 < entityTwo.position.y - entityTwo.size.height / 2 || 
+        entityOne.position.x - entityOne.size.width / 2 > entityTwo.position.x + entityTwo.size.width / 2 || 
+        entityOne.position.y - entityOne.size.height / 2 > entityTwo.position.y + entityTwo.size.width / 2)
+}
+
 ;(function (){
     var Game = function(canvasId){
         var canvas = document.getElementById(canvasId);
@@ -7,8 +17,11 @@
             y: canvas.height
         };
 
-        this.bodies = [new Player(this, gamesize)];
-        this.invaders = createInvaders(this)
+        // this.bodies = [new Player(this, gamesize)];
+        this.killedEnemies = 0;
+        this.entitiesTypes = {Enemy: 'enemy', Player: 'player', Bullet: 'bullet'}
+        this.entities = [{entity: new Player(this, gamesize), type: this.entitiesTypes.Player}]
+        createInvaders(this, this.entities, this.entitiesTypes)
 
         var self = this;
         var tick = function(){
@@ -22,31 +35,61 @@
 
     Game.prototype = {
         update: function(gamesize) {
-            for(var i = 0; i < this.bodies.length; i++){
-                if(this.bodies[i].position.x > gamesize.x) {
-                    this.bodies.splice(i, 1); //удаляет 1 элемент из массива после элемента i
+            if (!flag) return;
+            const eCopy = [...this.entities];
+            for (let i = 0; i < eCopy.length; i++) {
+                for (let j = 0; j < eCopy.length; j++) {
+                    const firstType = eCopy[i].type;
+                    const secondType = eCopy[j].type;
+                    if ((firstType !== this.entitiesTypes.Player && firstType !== this.entitiesTypes.Bullet)
+                        || secondType !== this.entitiesTypes.Enemy) continue;
+
+                    if (isCollidng(eCopy[i].entity, eCopy[j].entity)) {
+                        if (eCopy[i].type === this.entitiesTypes.Player) {
+                            console.log('collide')
+                            flag = false;
+                            return;
+                        }
+                        this.entities.splice(i,1);
+                        this.entities.splice(j,1)
+                    }
                 }
             }
-            for(var i = 0; i < this.bodies.length; i++){
-                this.bodies[i].update();
-            }
-            for(var i = 0; i < this.invaders.length; i++){
-                
-                this.invaders[i].update();
+            for (let i = 0; i < this.entities.length; i++) {
+                switch (this.entities[i].type) {
+                    case this.entitiesTypes.Bullet:
+                        if (this.entities[i].entity.position.x > gamesize.x) {
+                            this.entities.splice(i, 1);
+                            break;
+                        }
+                        this.entities[i].entity.update()
+                        break;
+                    default:
+                        this.entities[i].entity.update();
+                        break;
+                }
             }
         },
-        draw: function(screen, gamesize) {
+        draw: function(screen, gamesize) 
+        {
             clearRect(screen, gamesize);
-            drawPony(screen, this.bodies[0])
-            for(var i = 1; i < this.bodies.length; i++){
-                drawPrim(screen, this.bodies[i]);
-            }
-            for(var i = 0; i < this.invaders.length; i++){
-                drawEnemy(screen, this.invaders[i]);
-            }
+            this.entities.forEach((el, ind) =>{
+                switch (el.type) {
+                    case this.entitiesTypes.Enemy:
+                        drawEnemy(screen, el.entity);
+                        break;
+                    case this.entitiesTypes.Bullet:
+                        drawPrim(screen, el.entity);
+                        break;
+                    case this.entitiesTypes.Player:
+                        drawPony(screen, el.entity);
+                        break
+                }
+            })
         },
         addBody: function(body) {
-            this.bodies.push(body);
+            this.entities.push({entity: body, type: this.entitiesTypes.Bullet});
+            console.log(this.entities)
         },
     }
 
@@ -64,16 +107,16 @@
         }
     }
 
-    var createInvaders = function(game){
-        var invaders = [];
+    var createInvaders = function(game, entities, entetiesTypes){
+        // var invaders = [];
         setInterval(
             () => {
             var y = Math.floor(Math.random() * 470);
-            invaders.push(new Invader(game, {x:900, y:y}));
+            entities.push({entity: new Invader(game, {x:900, y:y}), type: entetiesTypes.Enemy});
             },
             1 * 1000
           );
-        return invaders;
+        // return invaders;
     }
 
     var Player = function(game, gamesize){
@@ -114,9 +157,9 @@
             }
             if(this.Keyboarder.isDown(this.Keyboarder.KEYS.SPACE)) {
                 if (this.bullets < 1) {
-                var bullet = new Bullet({x:this.position.x + this.size.width, y:this.position.y + this.size.width/2}, {x:6, y: 0});
-                this.game.addBody(bullet);
-                this.bullets++;
+                    var bullet = new Bullet({x:this.position.x + this.size.width, y:this.position.y + this.size.width/2}, {x:6, y: 0});
+                    this.game.addBody(bullet);
+                    this.bullets++;
                 }
             }
             this.timer++;
@@ -154,7 +197,6 @@
     var drawEnemy = function(screen, body){
         screen.shadowOffsetX = 0;
         screen.drawImage(imgEnemy, body.position.x, body.position.y, 70, 55);
-        
     }
     var drawPrim = function(screen, body){
         screen.fillStyle = "white";
@@ -162,12 +204,26 @@
         screen.shadowColor = "red";
         screen.fillRect(body.position.x, body.position.y, body.size.width, body.size.height);
     }
+    
 
     var clearRect = function(screen, gamesize){
         screen.clearRect(0, 0, gamesize.x, gamesize.y);
     }
 
     window.onload = function() {
+        let seconds = 5;
+        const timer = document.getElementById('timer');
+        setInterval(() => {
+            if (seconds < 0) {
+                flag = false;
+                // Надпись "Times up"
+                return;
+            }
+            timer.textContent = "0:" + seconds;
+            seconds--;
+            
+            
+        }, 30 * 1000);
         new Game("screen");
     }
 })();
