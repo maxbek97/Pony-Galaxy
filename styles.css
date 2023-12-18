@@ -27,6 +27,7 @@ body {
 }
 
 .main {
+    height: 585px;
     width: 20%;
     margin: 0 auto 0 auto;
 }
@@ -98,3 +99,18 @@ a {
     border: 0;
     margin: 0;
    }
+
+ footer {
+    height: 50px;
+    position: fixed;
+    left: 5px;
+    bottom: 5px;
+    right: 5px;
+ }
+
+ .blin {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+ }

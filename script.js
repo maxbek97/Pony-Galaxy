@@ -14,19 +14,19 @@ switch (searchParams.get('difficulty')){
         break;
 }
 
-function EndGame(seconds, killed, shoots, interval){
+function EndGame(seconds, killed, shoots){
     let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
     data = {name: name, accuracy: killed/shoots * 100, time: seconds};
-    scoresStr = localStorage.getItem('score')
-    score = JSON.parse(scoreStr)
+    var scoreStr = localStorage.getItem('score')
+    var score = JSON.parse(scoreStr)
     if (score === null) {
         score = []
    }
    score.push(data);
    scoreStr = JSON.stringify(score);
    localStorage.setItem('score', scoreStr);
-   clearInterval(interval);
-//    window.location.reload();
+//    clearInterval(interval);
+   window.location.reload();
 };
 
 function isCollidng(entityOne, entityTwo) {
@@ -39,7 +39,7 @@ function isCollidng(entityOne, entityTwo) {
 
 ;(function (){
     window.onload = function() {
-        scoreJson = localStorage.getItem('score')
+        var scoreJson = localStorage.getItem('score')
         score = JSON.parse(scoreJson)
         if (score !== null) {
             for(const el of score) {}
@@ -53,8 +53,11 @@ function isCollidng(entityOne, entityTwo) {
         const interval = setInterval(() => {
             if (seconds < 0 || flag == false) {
                 flag = false;
+                // let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
                 EndGame(seconds, killedEnemies, madeshoots);
-                // clearInterval(interval);
+                console.log("blyat");
+                
+                clearInterval(interval);
                 return;
             }
             timer.textContent = seconds;
