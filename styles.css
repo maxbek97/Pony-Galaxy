@@ -114,3 +114,18 @@ a {
     text-align: center;
     align-items: center;
  }
+
+ .leaderboards {
+    color: black;
+
+ }
+ .stat {
+    display: inline-flex;
+    flex-direction: row;
+    font-size: 15px;
+    justify-content: flex-end;
+ }
+ .Hof ul li {
+    border: 5px solid rgb(0, 0, 0);
+    margin: 15px 10px 15px 10px;
+ }

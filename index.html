@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang = "ru">
 <head>
+    <link rel="shortcut icon" href="images/enemy R1 sprite.png" />
     <link href="styles.css" rel="stylesheet">
     <meta charset="UTF-8">
     <script src="script.js"></script>
@@ -43,17 +44,18 @@
             <div class="status difficulty">
                 <ul class="text casual">
                 <li>Time remaining:</li>
-                <li id="timer" class="stat"></li>
+                <li id="timer"></li>
                 <li>Shoots:</li>
-                <li id="shoots" class="stat">0</li>
+                <li id="shoots">0</li>
                 <li>Killed:</li>
-                <li id="killed" class="stat">0</li>
+                <li id="killed">0</li>
                 </ul>
             </div>
         </div>
         <div class="main Hof" style="color: azure;">
             <h2 class="text" style="color:black">Hall of Fame</h2>
-            <div> </div>
+            <ul id="HOF" style="list-style-type: none; padding-left: 0;">
+            </ul>
         </div>
     </div>
     <footer class="difficulty">

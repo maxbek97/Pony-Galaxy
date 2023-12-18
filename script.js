@@ -1,3 +1,4 @@
+// window.localStorage.clear()
 let flag = true;
 let killedEnemies = 0;
 let madeshoots = 0;
@@ -16,18 +17,58 @@ switch (searchParams.get('difficulty')){
 
 function EndGame(seconds, killed, shoots){
     let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
-    data = {name: name, accuracy: killed/shoots * 100, time: seconds};
+    if (name === null) {name = "Stranger"}
+    else if (name.length > 9) name = name.substring(0,9);
+
+    var kd = killed/shoots;
+    if (kd === Infinity || kd === null) {kd = 0;}
+
+    data = {name: name, accuracy: Math.round(kd * 100), time: seconds + 1, score: Math.round(killed * kd * 100 * (25 - seconds))};
+
     var scoreStr = localStorage.getItem('score')
     var score = JSON.parse(scoreStr)
     if (score === null) {
         score = []
    }
    score.push(data);
+   score.sort(function(a, b) {
+    return b.score - a.score;
+  });
+   if (score.length === 6) score.splice(5, 1)
    scoreStr = JSON.stringify(score);
    localStorage.setItem('score', scoreStr);
-//    clearInterval(interval);
    window.location.reload();
 };
+
+function AddLeaderboards() {
+    const el = document.querySelector("#HOF");
+    var scoreJson = localStorage.getItem('score')
+    score = JSON.parse(scoreJson)
+    if (score !== null) {
+        for(var i = 0; i < score.length; i++) {
+            const div = document.createElement('div');
+            div.classList.add('wrapper');
+            const namediv = document.createElement('div');
+            namediv.classList.add("text");
+            namediv.classList.add("casual");
+            namediv.classList.add("leaderboards");
+            namediv.textContent = " " + (i+1) + ". " + score[i].name;
+            div.appendChild(namediv)
+            const stat = document.createElement('div');
+            stat.classList.add("text");
+            stat.classList.add("casual");
+            stat.classList.add("leaderboards");
+            stat.classList.add("stat");
+            stat.textContent = "Time - " + score[i].time + " sec Accuracy - " + score[i].accuracy + "%";
+            div.appendChild(stat);
+            const li = document.createElement('li');
+            li.appendChild(div);
+            el.appendChild(li);
+
+        }
+    }
+
+}
 
 function isCollidng(entityOne, entityTwo) {
     return !(entityOne === entityTwo || 
@@ -39,11 +80,8 @@ function isCollidng(entityOne, entityTwo) {
 
 ;(function (){
     window.onload = function() {
-        var scoreJson = localStorage.getItem('score')
-        score = JSON.parse(scoreJson)
-        if (score !== null) {
-            for(const el of score) {}
-        }
+        AddLeaderboards();
+
         const countkilled = document.getElementById('killed');
         const countshoots = document.getElementById('shoots');
         let seconds = 25;
@@ -53,10 +91,7 @@ function isCollidng(entityOne, entityTwo) {
         const interval = setInterval(() => {
             if (seconds < 0 || flag == false) {
                 flag = false;
-                // let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
-                EndGame(seconds, killedEnemies, madeshoots);
-                console.log("blyat");
-                
+                EndGame(seconds, killedEnemies, madeshoots);  
                 clearInterval(interval);
                 return;
             }
