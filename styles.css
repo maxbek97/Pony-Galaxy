@@ -27,7 +27,7 @@ body {
 }
 
 .main {
-    height: 585px;
+    height: 633px;
     width: 20%;
     margin: 0 auto 0 auto;
 }
@@ -119,13 +119,20 @@ a {
     color: black;
 
  }
+
  .stat {
     display: inline-flex;
     flex-direction: row;
     font-size: 15px;
     justify-content: flex-end;
  }
+
  .Hof ul li {
     border: 5px solid rgb(0, 0, 0);
     margin: 15px 10px 15px 10px;
+ }
+
+ #New {
+    justify-content: center;
+    cursor: pointer;
  }

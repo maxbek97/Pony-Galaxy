@@ -15,6 +15,7 @@ switch (searchParams.get('difficulty')){
         break;
 }
 
+
 function EndGame(seconds, killed, shoots){
     let name = prompt("Please, enter your name, mortal", "H0peles$0uL");
     if (name === null) {name = "Stranger"}
@@ -37,7 +38,6 @@ function EndGame(seconds, killed, shoots){
    if (score.length === 6) score.splice(5, 1)
    scoreStr = JSON.stringify(score);
    localStorage.setItem('score', scoreStr);
-   window.location.reload();
 };
 
 function AddLeaderboards() {
@@ -81,7 +81,9 @@ function isCollidng(entityOne, entityTwo) {
 ;(function (){
     window.onload = function() {
         AddLeaderboards();
-
+        New.onclick = function(event) {
+            window.location.reload();
+          }
         const countkilled = document.getElementById('killed');
         const countshoots = document.getElementById('shoots');
         let seconds = 25;
